@@ -58,7 +58,6 @@ public class GlobalExceptionHandler {
             DataIntegrityViolationException ex,
             HttpServletRequest request
     ) {
-        // Normalmente duplicados / constraint violations
         return build(HttpStatus.BAD_REQUEST, "Data integrity violation", request.getRequestURI(), null);
     }
 
