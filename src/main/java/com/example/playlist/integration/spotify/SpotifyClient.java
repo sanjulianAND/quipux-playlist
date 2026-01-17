@@ -1,4 +1,4 @@
-package com.example.playlists.integration.spotify;
+package com.example.playlist.integration.spotify;
 
 public class SpotifyClient {
 }
