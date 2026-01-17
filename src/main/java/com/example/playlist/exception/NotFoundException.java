@@ -1,4 +1,7 @@
-package com.example.playlists.exception;
+package com.example.playlist.exception;
 
-public class NotFoundException {
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(String message) {
+        super(message);
+    }
 }

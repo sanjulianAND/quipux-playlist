@@ -1,4 +1,4 @@
-package com.example.playlists.service;
+package com.example.playlist.service;
 
 public class AuthService {
 }

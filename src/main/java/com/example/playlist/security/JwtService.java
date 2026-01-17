@@ -1,4 +1,4 @@
-package com.example.playlists.security;
+package com.example.playlist.security;
 
 public class JwtService {
 }

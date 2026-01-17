@@ -1,4 +1,4 @@
-package com.example.playlists.controller;
+package com.example.playlist.controller;
 
 public class AuthController {
 }
