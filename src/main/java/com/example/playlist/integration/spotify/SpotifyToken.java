@@ -11,7 +11,7 @@ public class SpotifyToken {
     private String tokenType;
 
     @JsonProperty("expires_in")
-    private long expiresIn;
+    private Long expiresIn;
 
     public SpotifyToken() {}
 
@@ -23,7 +23,7 @@ public class SpotifyToken {
 
     public void setTokenType(String tokenType) { this.tokenType = tokenType; }
 
-    public long getExpiresIn() { return expiresIn; }
+    public Long getExpiresIn() { return expiresIn; }
 
-    public void setExpiresIn(long expiresIn) { this.expiresIn = expiresIn; }
+    public void setExpiresIn(Long expiresIn) { this.expiresIn = expiresIn; }
 }

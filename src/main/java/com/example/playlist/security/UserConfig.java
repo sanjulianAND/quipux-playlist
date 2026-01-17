@@ -14,15 +14,15 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class UserConfig {
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    UserDetailsService userDetailsService(
-            @Value("${app.auth.username:admin}") String username,
-            @Value("${app.auth.password:admin}") String password,
-            PasswordEncoder encoder
+    public UserDetailsService userDetailsService(
+            PasswordEncoder encoder,
+            @Value("${security.user.username:admin}") String username,
+            @Value("${security.user.password:admin}") String password
     ) {
         UserDetails user = User.withUsername(username)
                 .password(encoder.encode(password))

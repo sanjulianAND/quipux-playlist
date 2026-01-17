@@ -1,10 +1,11 @@
 package com.example.playlist.integration.spotify;
 
-import com.example.playlist.exception.BadRequestException;
+import com.example.playlist.exception.SpotifyException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -16,8 +17,8 @@ public class SpotifyService {
     private final String clientId;
     private final String clientSecret;
 
-    private volatile String cachedToken;
-    private volatile Instant expiresAt = Instant.EPOCH;
+    private String cachedToken;
+    private Instant cachedTokenExpiresAt;
 
     public SpotifyService(
             SpotifyAuthClient authClient,
@@ -32,27 +33,31 @@ public class SpotifyService {
     }
 
     public List<String> getGenres() {
-        String token = getAccessToken();
-        return spotifyClient.getAvailableGenres(token);
-    }
-
-    private String getAccessToken() {
         if (clientId.isBlank() || clientSecret.isBlank()) {
-            throw new BadRequestException("Spotify credentials are not configured");
+            throw new SpotifyException("Spotify credentials are not configured");
         }
 
+        String token = getValidToken();
+        SpotifyClient.GenresResponse resp = spotifyClient.getAvailableGenres(token);
+        if (resp == null || resp.getGenres() == null) return Collections.emptyList();
+        return resp.getGenres();
+    }
+
+    private String getValidToken() {
         Instant now = Instant.now();
-        if (cachedToken != null && now.isBefore(expiresAt.minusSeconds(30))) {
+        if (cachedToken != null && cachedTokenExpiresAt != null && now.isBefore(cachedTokenExpiresAt)) {
             return cachedToken;
         }
 
-        SpotifyToken token = authClient.requestClientCredentialsToken(clientId, clientSecret);
+        SpotifyToken token = authClient.getClientCredentialsToken(clientId, clientSecret);
         if (token == null || token.getAccessToken() == null || token.getAccessToken().isBlank()) {
-            throw new BadRequestException("Unable to obtain Spotify token");
+            throw new SpotifyException("Unable to obtain spotify token");
         }
 
+        long expiresIn = token.getExpiresIn() == null ? 0L : token.getExpiresIn();
         cachedToken = token.getAccessToken();
-        expiresAt = now.plusSeconds(Math.max(0, token.getExpiresIn()));
+        cachedTokenExpiresAt = now.plusSeconds(Math.max(1, expiresIn - 30));
+
         return cachedToken;
     }
 }

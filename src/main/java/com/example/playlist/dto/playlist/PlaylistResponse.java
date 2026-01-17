@@ -1,18 +1,18 @@
 package com.example.playlist.dto.playlist;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class PlaylistResponse {
 
-    @JsonAlias({"nombre", "name"})
+    @JsonProperty("nombre")
     private String name;
 
-    @JsonAlias({"descripcion", "description"})
+    @JsonProperty("descripcion")
     private String description;
 
-    @JsonAlias({"canciones", "songs"})
+    @JsonProperty("canciones")
     private List<SongDto> songs;
 
     public PlaylistResponse() {}

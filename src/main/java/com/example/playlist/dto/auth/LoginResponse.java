@@ -4,14 +4,14 @@ public class LoginResponse {
 
     private String accessToken;
     private String tokenType;
-    private long expiresInSeconds;
+    private long expiresInMinutes;
 
     public LoginResponse() {}
 
-    public LoginResponse(String accessToken, String tokenType, long expiresInSeconds) {
+    public LoginResponse(String accessToken, String tokenType, long expiresInMinutes) {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
-        this.expiresInSeconds = expiresInSeconds;
+        this.expiresInMinutes = expiresInMinutes;
     }
 
     public String getAccessToken() { return accessToken; }
@@ -22,7 +22,7 @@ public class LoginResponse {
 
     public void setTokenType(String tokenType) { this.tokenType = tokenType; }
 
-    public long getExpiresInSeconds() { return expiresInSeconds; }
+    public long getExpiresInMinutes() { return expiresInMinutes; }
 
-    public void setExpiresInSeconds(long expiresInSeconds) { this.expiresInSeconds = expiresInSeconds; }
+    public void setExpiresInMinutes(long expiresInMinutes) { this.expiresInMinutes = expiresInMinutes; }
 }

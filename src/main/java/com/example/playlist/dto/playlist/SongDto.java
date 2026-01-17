@@ -1,24 +1,30 @@
 package com.example.playlist.dto.playlist;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public class SongDto {
 
-    @JsonAlias({"titulo", "title"})
-    @NotBlank(message = "title is required")
+    @NotBlank(message = "titulo is required")
+    @JsonProperty("titulo")
+    @JsonAlias({"title"})
     private String title;
 
-    @JsonAlias({"artista", "artist"})
+    @JsonProperty("artista")
+    @JsonAlias({"artist"})
     private String artist;
 
+    @JsonProperty("album")
     @JsonAlias({"album"})
     private String album;
 
-    @JsonAlias({"anno", "year"})
+    @JsonProperty("anno")
+    @JsonAlias({"year"})
     private Integer year;
 
-    @JsonAlias({"genero", "genre"})
+    @JsonProperty("genero")
+    @JsonAlias({"genre"})
     private String genre;
 
     public SongDto() {}
