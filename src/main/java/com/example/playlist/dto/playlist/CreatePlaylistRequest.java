@@ -1,5 +1,6 @@
 package com.example.playlist.dto.playlist;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,11 +8,14 @@ import java.util.List;
 
 public class CreatePlaylistRequest {
 
+    @JsonAlias({"nombre", "name"})
     @NotBlank(message = "name is required")
     private String name;
 
+    @JsonAlias({"descripcion", "description"})
     private String description;
 
+    @JsonAlias({"canciones", "songs"})
     @Valid
     private List<SongDto> songs;
 
