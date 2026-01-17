@@ -1,39 +1,33 @@
 package com.example.playlist.integration.spotify;
 
-import com.example.playlist.exception.SpotifyException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 @Component
 public class SpotifyAuthClient {
 
-    private final WebClient webClient;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public SpotifyAuthClient(WebClient.Builder builder) {
-        this.webClient = builder
-                .baseUrl("https://accounts.spotify.com")
-                .build();
-    }
+    public SpotifyToken getClientCredentialsToken(String clientId, String clientSecret) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth(clientId, clientSecret);
 
-    public SpotifyToken requestClientCredentialsToken(String clientId, String clientSecret) {
-        String raw = clientId + ":" + clientSecret;
-        String basic = Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("grant_type", "client_credentials");
 
-        return webClient.post()
-                .uri("/api/token")
-                .header(HttpHeaders.AUTHORIZATION, "Basic " + basic)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData("grant_type", "client_credentials"))
-                .retrieve()
-                .onStatus(s -> s.isError(), r -> r.bodyToMono(String.class)
-                        .map(body -> new SpotifyException("Spotify token error: " + r.statusCode().value() + " - " + body)))
-                .bodyToMono(SpotifyToken.class)
-                .block();
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(form, headers);
+
+        ResponseEntity<SpotifyToken> resp = restTemplate.exchange(
+                "https://accounts.spotify.com/api/token",
+                HttpMethod.POST,
+                entity,
+                SpotifyToken.class
+        );
+
+        return resp.getBody();
     }
 }

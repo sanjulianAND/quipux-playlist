@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/genres")
 public class GenresController {
 
     private final SpotifyService spotifyService;
@@ -16,8 +15,8 @@ public class GenresController {
         this.spotifyService = spotifyService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<String>> getGenres() {
+    @GetMapping("/genres")
+    public ResponseEntity<List<String>> genres() {
         return ResponseEntity.ok(spotifyService.getGenres());
     }
 }

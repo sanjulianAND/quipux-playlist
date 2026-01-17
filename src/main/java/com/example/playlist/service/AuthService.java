@@ -25,8 +25,6 @@ public class AuthService {
         );
 
         String token = jwtService.generateToken(auth.getName());
-        long expiresInSeconds = jwtService.getExpirationMinutes() * 60;
-
-        return new LoginResponse(token, "Bearer", expiresInSeconds);
+        return new LoginResponse(token, "Bearer", jwtService.getExpirationMinutes());
     }
 }

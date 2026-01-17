@@ -85,4 +85,13 @@ public class GlobalExceptionHandler {
         );
         return org.springframework.http.ResponseEntity.status(status).body(body);
     }
+
+    @ExceptionHandler(com.example.playlist.exception.SpotifyException.class)
+    public org.springframework.http.ResponseEntity<ErrorResponse> handleSpotify(
+            com.example.playlist.exception.SpotifyException ex,
+            jakarta.servlet.http.HttpServletRequest request
+    ) {
+        return build(org.springframework.http.HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI(), null);
+    }
+
 }
