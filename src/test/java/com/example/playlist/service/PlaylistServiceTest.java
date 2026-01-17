@@ -48,4 +48,42 @@ public class PlaylistServiceTest {
 
         assertThrows(BadRequestException.class, () -> service.create(req2));
     }
+
+    @Test
+    void shouldFailWhenNameIsNullOrBlank() {
+        CreatePlaylistRequest req1 = new CreatePlaylistRequest();
+        req1.setName(null);
+
+        assertThrows(BadRequestException.class, () -> service.create(req1));
+
+        CreatePlaylistRequest req2 = new CreatePlaylistRequest();
+        req2.setName("   ");
+
+        assertThrows(BadRequestException.class, () -> service.create(req2));
+    }
+
+    @Test
+    void shouldFailOnDuplicateEvenWithExtraSpaces() {
+        CreatePlaylistRequest req = new CreatePlaylistRequest();
+        req.setName("Lista 1");
+        service.create(req);
+
+        CreatePlaylistRequest req2 = new CreatePlaylistRequest();
+        req2.setName("  Lista 1  ");
+
+        assertThrows(BadRequestException.class, () -> service.create(req2));
+    }
+
+    @Test
+    void shouldFailOnDuplicateIgnoringCase() {
+        CreatePlaylistRequest req = new CreatePlaylistRequest();
+        req.setName("Lista 1");
+        service.create(req);
+
+        CreatePlaylistRequest req2 = new CreatePlaylistRequest();
+        req2.setName("lista 1");
+
+        assertThrows(BadRequestException.class, () -> service.create(req2));
+    }
+
 }
